@@ -66,3 +66,33 @@ path_remove_at2x(){
 	return 0
 }
 
+path_safe_mkdir(){
+	if [[ -d "$1" ]] ; then
+		return 0
+	fi
+	mkdir -p "$1"
+	return $?
+}
+
+path_safe_rmdir(){
+	if [[ ! -e  "$1" ]] ; then
+		return 0
+	fi
+	rm -rf "$1"
+	return $?
+}
+
+path_is_git_inited(){
+	if [[ ! -d "$1" ]] ; then
+		echo "0"
+		return 0
+	fi
+
+	pushd "$1" >/dev/null
+	git status >/dev/null 2>&1
+	echo $(( ! $? ))
+	popd > /dev/null
+	return 0
+}
+
+
