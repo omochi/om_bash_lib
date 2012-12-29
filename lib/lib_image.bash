@@ -59,7 +59,87 @@ image_make_1x_from_2x(){
 	return $?	
 }
 
+image_im_draw_image(){
+	echo "-draw 'image $1 $2,$3 $4,$5 \"$6\"'"
+	return 0
+}
+image_im_draw_line(){
+	echo "-draw 'line $1,$2 $3,$4'"
+	return 0
+}
 
+# 9patch用の画像の下地を作る
+# $1:貼り付ける画像パス
+# $2:貼り付ける画像の幅
+# $3:貼り付ける画像の高さ
+image_im_npatch_base(){
+	local image_path="$1"
+	local image_width="$2"
+	local image_height="$3"
+	local code="convert -size $((image_width+2))x$((image_height+2)) canvas: -alpha transparent"
+	code="$code $(image_im_draw_image SrcOver 1 1 $image_width $image_height "$image_path")" 
+	code="$code -stroke black -strokewidth 0"
+	echo "$code"
+	return 0
+}
 
+# $1:画像の幅
+# $2:画像の高さ
+# $3,4,5,6:top,left,bottom,right
+image_im_npatch_resize_inset(){
+	local w=$1
+	local h=$2
+	local to=$3
+	local le=$4
+	local bo=$5
+	local ri=$6
+	local code=""
+	code="$code $(image_im_draw_line $((1+le)) 0 $((1+w-ri-1)) 0)"
+	code="$code $(image_im_draw_line 0 $((1+to)) 0 $((1+h-bo-1)))"
+	echo "$code"
+	return 0
+}
 
+image_im_npatch_content_inset(){
+	local w=$1
+	local h=$2
+	local to=$3
+	local le=$4
+	local bo=$5
+	local ri=$6
+	local code=""
+	code="$code $(image_im_draw_line $((1+le)) $((1+h)) $((1+w-ri-1)) $((1+h)) )"
+	code="$code $(image_im_draw_line $((1+w)) $((1+to)) $((1+w)) $((1+h-bo-1)) )"
+	echo "$code"
+	return 0
+}
+
+# $1:source image path
+# $2:output npatch image path
+# $3,4,5,6:resize inset,top,left,bottom,right
+# $7,8,9,10:content inset(optional)
+image_make_npatch(){
+	local src="$1"
+	local out="$2"
+	local rt="$3"
+	local rl="$4"
+	local rb="$5"
+	local rr="$6"
+	local ct="$7"
+	local cl="$8"
+	local cb="$9"
+	local cr="${10}"
+	local w=$(image_get_width "$src")
+	local h=$(image_get_height "$src")
+	local code=""
+	
+	code="$code $(image_im_npatch_base "$src" $w $h)"
+	code="$code $(image_im_npatch_resize_inset $w $h $rt $rl $rb $rr)"
+	if [[ -n $cr ]] ; then
+		code="$code $(image_im_npatch_content_inset $w $h $ct $cl $cb $cr)"
+	fi
+	code="$code \"$out\""
+	echo_eval "$code"
+	return $?
+}
 
