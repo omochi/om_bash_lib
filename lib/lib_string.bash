@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source "lib_math.bash"
 string_remove_suffix(){
 	local str="$1"
 	local suf="$2"
@@ -54,6 +54,30 @@ string_set_prefix(){
 	else
 		echo "$pre$str"
 	fi
+	return 0
+}
+
+string_length(){
+	local str="$1"
+	echo ${#str}
+	return 0
+}
+string_sub(){
+	local str="$1"
+	local start="$2"
+	local len="$3"
+	local strlen=$(string_length "$str")
+	if [[ -z "$len" ]] ; then
+		len=$strlen
+	fi
+	if (( $start < 0 )) ; then
+		start=$(( $strlen + $start ))
+	fi
+	start=$(math_min $start $strlen)
+	if (( $len < 0 )) ; then
+		len=$(( $strlen + $len - $start  ))
+	fi
+	echo "${str:$start:$len}"
 	return 0
 }
 

@@ -1,0 +1,15 @@
+#!/bin/bash
+here=$(cd $(dirname "$0");pwd)
+export PATH="$here/../lib:$PATH"
+source "lib_string.bash"
+source "lib_debug.bash"
+a="あいう え  お"
+debug_dump_var "$(string_length "$a")"
+debug_dump_var "$(string_sub "$a" 0)"
+debug_dump_var "$(string_sub "$a" 1)"
+debug_dump_var "$(string_sub "$a" 2 1)"
+debug_dump_var "$(string_sub "$a" 2 10)"
+debug_dump_var "$(string_sub "$a" -1 0)"
+debug_dump_var "$(string_sub "$a" -1 1)"
+debug_dump_var "$(string_sub "$a" 2 -1)"
+debug_dump_var "$(string_sub "$a" -4 -1)"
