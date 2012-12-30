@@ -22,6 +22,7 @@ array_push(){
 
 # $1:name of source array
 # $2:glue 
+# 逆変換はlib_string.bash
 array_join(){
 	local name="$1"
 	local IFS="$2"
@@ -29,20 +30,5 @@ array_join(){
 	array_copy "$name" "array"
 	echo "${array[*]}"
 	return 0
-}
-
-# $1:source string
-# $2:delimiter
-# $3:name of dest array
-string_split(){
-	local str="$1"
-	local IFS="$2"
-	local dest="$3"
-	local result=()
-	for item in $str ; do
-		array_push "result" "$item"
-	done
-	array_copy "result" "$dest"
-	return 0	
 }
 

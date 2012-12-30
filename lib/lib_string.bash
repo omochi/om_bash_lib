@@ -81,3 +81,17 @@ string_sub(){
 	return 0
 }
 
+# $1:source string
+# $2:delimiter
+# $3:name of dest array
+string_split(){
+	local str="$1"
+	local IFS="$2"
+	local dest="$3"
+	local result=()
+	set -- $str
+	result=("$@")
+	array_copy "result" "$dest"
+	return 0	
+}
+

@@ -3,7 +3,7 @@ here=$(cd $(dirname "$0");pwd)
 export PATH="$here/../lib:$PATH"
 source "lib_array.bash"
 source "lib_debug.bash"
-
+source "lib_string.bash"
 echo "=== join ==="
 aaa=("aa aa" "bb  bb" "c")
 echo "$(array_join aaa "+")"
