@@ -51,6 +51,18 @@ echo "[$path]=>[$(path_set_ext "$path" ".png")]"
 path="aaa/bbb.txt/hoge.old.jpeg"
 echo "[$path]=>[$(path_set_ext "$path" ".png")]"
 
+echo "===multi ext==="
+p="hoge"
+echo "[$p]=>[$(path_count_ext "$p")]"
+p="hoge.zip"
+echo "[$p]=>[$(path_count_ext "$p")][$(path_remove_multi_ext "$p" 0)][$(path_get_multi_ext "$p" 0)][$(path_get_multi_ext "$p" 1)]"
+p="hoge.tar.zip"
+echo "[$p]=>[$(path_count_ext "$p")][$(path_remove_multi_ext "$p" 1)][$(path_get_multi_ext "$p" 0)][$(path_get_multi_ext "$p" 1)]"
+
+p="fugafuga/hoge.win.png"
+echo "[$p]=>[$(path_set_multi_ext "$p" 1 ".lose")][$(path_get_multi_ext "$p" 0)]"
+
+
 echo "===at2x==="
 path="ho g  e"
 echo "[$(path_is_at2x "$path")],[$(path_remove_at2x "$path")],[$(path_set_at2x "$path")]"
