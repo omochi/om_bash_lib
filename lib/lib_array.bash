@@ -3,20 +3,20 @@
 # $1:name of source array
 # $2:name of dest array
 array_copy(){
-	local src="$1"
-	local dest="$2"
-	eval "$dest=(\"\${$src[@]}\")"
+	local _src=$1
+	local _dest=$2
+	eval "$_dest=(\"\${$_src[@]}\")"
 	return 0
 }
 
 # $1:name of array
 # $2:item
 array_push(){
-	local name="$1"
-	local array=()
-	array_copy "$name" "array"
-	array=("${array[@]}" "$2")
-	array_copy "array" "$name"
+	local _name="$1"
+	local _array=()
+	array_copy "$_name" "_array"
+	_array=("${_array[@]}" "$2")
+	array_copy "_array" "$_name"
 	return 0
 }
 
@@ -24,11 +24,11 @@ array_push(){
 # $2:glue 
 # 逆変換はlib_string.bash
 array_join(){
-	local name="$1"
-	local IFS="$2"
-	local array=()
-	array_copy "$name" "array"
-	echo "${array[*]}"
+	local _name=$1
+	local IFS=$2
+	local _array=()
+	array_copy "$_name" "_array"
+	echo "${_array[*]}"
 	return 0
 }
 
